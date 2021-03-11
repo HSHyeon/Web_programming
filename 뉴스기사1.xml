@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="stylesheet.css"?>
+<news xmlns="http://mm.sookmyung.ac.kr/xml" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://mm.sookmyung.ac.kr/xml Document1.xsd">
+
+<header>
+	<source link="http://www.m-i.kr/news/articleView.html?idxno=637104">매일 일보</source>
+	
+	<reporter>
+		<name>강미화</name>
+		<email address="kangpd@m-i.kr">kangpd@m-i.kr</email>
+		<tel preferred="true">010-1234-5678</tel>
+	</reporter>
+	<dateTime>
+      <date>2019-09-10</date>
+      <time clock="PM">09: 43 PM</time>
+    </dateTime>
+	
+	<category list="문화일반"/>
+	
+</header>
+
+<body>
+<title subject="main">볼빨간사춘기, 10일 새 앨범 'Two Five' 발매… 타이틀곡은 '워커홀릭'</title>
+
+<picture1 file="http://www.m-i.kr/news/photo/201909/637104_430312_4255.jpg"/>
+
+<article>
+<![CDATA[볼빨간사춘기가 오늘(10일) 새 미니앨범 'Two Five'(투 파이브)를 발매한다. 
+
+볼빨간사춘기의 새 미니앨범 'Two Five'는 타이틀곡 '워커홀릭'을 비롯해 '25', 'XX', 'Taste'(테이스트), '낮'(Day off), 그리고 'XX'(Acoustic Ver.)까지 총 6곡이 수록되어 있다. 앞서 볼빨간사춘기는 한층 성숙해지고 새로워진 음악적 변신을 예고하며 컴백 전부터 뜨거운 반응을 얻고 있다.
+
+특히 타이틀곡 '워커홀릭'은 세상에 부딪히는 정도가 남들보다 더 잦은, 지친 워커홀릭들에게 보내는 메시지를 담았으며 기타, 오르간, 스트링, Big Drum 등 다양한 사운드와 보다 강렬해진 보컬로 볼빨간사춘기만의 새로운 음악적 시도를 느낄 수 있는 곡이다.
+
+또한 래칫 비트 힙합 스타일의 트랙 위에 올려진 중독성 있는 멜로디가 특징인 '25', 미디엄 템포의 쓸쓸한 감성의 멜로디와 감성적인 보컬라인이 돋보이는 'XX', 
+어쿠스틱 기타의 센치한 감성의 곡 분위기와 독특한 보컬 표현이 매력적인 'Taste', 강렬한 신스 사운드와 디스트 기타 그리고 일렉트로닉 사운드와 어쿠스틱 사운드의 조화가 매력적인 곡 '낮'(Day off)까지 
+이번 새 미니앨범 'Two Five'는 볼빨간사춘기가 뮤지션으로서 한층 넓어진 음악적 스펙트럼을 강렬하게 보여주는 앨범이다.
+
+그동안 발매하는 곡마다 음원차트 정상을 놓치지 않았던 볼빨간사춘기가 새로운 음악 변신을 통해 다시 한번 음원차트 왕좌의 자리에 앉을 수 있을지 귀추가 주목된다.
+
+한편, 볼빨간사춘기는 10일 오후 6시 각종 음원 사이트를 통해 새 미니앨범 'Two Five'를 발매한 후 활발한 활동을 이어갈 예정이다.
+]]>
+</article>
+</body>
+
+<hashtag>
+<word>#볼빨간사춘기</word>
+<word>#신곡</word>
+<word>#워커홀릭</word>
+</hashtag>
+
+</news>
+

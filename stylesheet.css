@@ -1,0 +1,28 @@
+news, source, title, article, picture1, picture2{display: block}
+
+header reporter, dateTime, hashtag{margin-right:20px;padding:5px; font-size:x-small; float:right; color:#566270 }
+
+source{padding:10px; background-color:#B2AAEE; text-align:center;
+ font-family:"맑은 고딕";color:white; font-size:40px; font-weight:bold;
+}
+
+body{display: block; margin:22px;margin-bottom:5px; padding:15px;
+ font-family:"Times New Roman","명조체" ;border:thin double #566270}
+
+body title, summary, picture1,picture2{margin:20px}
+
+body title{font-size:x-large
+; margin-top:10px}
+
+body summary{color:#566270 }
+
+article{font-size:15px ;line-height:1.5em; margin:15px}
+
+picture1{background:url("http://www.m-i.kr/news/photo/201909/637104_430312_4255.jpg") no-repeat;
+background-size: contain ;width:500px ;height:500px}
+
+picture2{background:url("http://image.news1.kr/system/photos/2014/8/2/960628/article.jpg") no-repeat;
+background-size: contain ;width:500px ;height:500px}
+
+hashtag word{color:#9999FF;text-decoration: underline;font-style :oblique;
+ }
