@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<HTML><head>
+<style>
+input{background-color:none;border: 1 solid gray}
+form{border: 1 solid gray;padding:15px;margin:0px}
+td{padding:15px}
+input,select{padding:3px ;margin-bottom:5px}
+</style>
+</head>
+<!-- 수정기능 추가할지말지, 신규추가 저장, 미리보기 할때 등등 예쁘게 보이기  -->
+<Script language="Javascript">
+var xdoc, xroot, bnode;
+var page_no, page_sum; 
+var xdoc=new ActiveXObject("Msxml.DOMDocument");
+xdoc.async=false;
+
+function FileLoad1(filename) <!--파일로드-->
+{ 
+xdoc.load(filename);
+xroot=xdoc.documentElement;
+alert("[파일로드 성공] \n 파일이름은 "+ filename +"이고, \n 루트 엘리먼트 이름은 " + xroot.nodeName + "입니다");
+goList(0);
+}
+  
+function goList(num) <!--리스트보기-->
+{        
+page_sum= xroot.childNodes.length;
+ 
+      switch (num) 
+      {
+          case 0 : page_no=0; break;
+          case 1 : if (page_no > 0) page_no--; break;
+          case 2 : page_no++; 
+                      if (page_no == page_sum) page_no--;  break;
+          case 3 : page_no=page_sum-1; break;
+      }  
+    p_no.innerText=page_no+1;
+    p_sum.innerText=page_sum;
+
+    bnode= xroot.childNodes(page_no);
+    controls.s_title.value= bnode.childNodes(0).text; <!--제목-->
+
+    controls.s_reporter.value= bnode.childNodes(2).childNodes(0).childNodes(0).text; <!--리포터-->
+    
+    var date=bnode.childNodes(2).childNodes(1).childNodes(0);
+    controls.s_year.value=date.childNodes(0).text;
+    controls.s_month.value=date.childNodes(1).text;
+    controls.s_date.value=date.childNodes(2).text;
+    
+    list=bnode.childNodes(0).childNodes(0).getAttribute("list");    <!--분야-->
+    if(!list)list='기타';
+        controls.s_category.value=list;
+    resDiv2.innerText= bnode.xml;
+} 
+
+function newAppend()
+{ 
+      p_no.innerText='?';
+      p_sum.innerText=page_sum;
+              
+      controls.s_category.value="기타";
+      controls.s_title.value = '';
+      controls.s_reporter.value = '';
+      controls.s_year.value='';
+      controls.s_month.value='';
+      controls.s_date.value='';
+      resDiv2.innerText = '<news>\n\n <header>\n <category/>\n <title/>\n </header>\n\n <body/>\n\n <foot>\n <reporter>\n <name/>\n </reporter>\n <dateTime>\n <date>\n <year/>\n <month/>\n <day/>\n </date>\n </dateTime>\n </foot>\n </news>' ;
+}
+
+function newsnode(){ <!--새로운 노드 추가-->
+      bnode = xdoc.createElement('news'); 
+        
+        cnode = xdoc.createElement('header');
+        dnode= xdoc.createElement('category');
+        bnode.appendChild(cnode);
+        cnode.appendChild(dnode);
+        dnode = xdoc.createElement('title');
+        cnode.appendChild(dnode);
+        
+        cnode = xdoc.createElement('body');
+        bnode.appendChild(cnode);
+
+        cnode = xdoc.createElement('foot');
+        dnode = xdoc.createElement('reporter');
+        enode=xdoc.createElement('name');  
+        bnode.appendChild(cnode);
+        cnode.appendChild(dnode);
+        dnode.appendChild(enode);
+        
+        dnode = xdoc.createElement('dateTime');
+        enode= xdoc.createElement('date');
+        cnode.appendChild(dnode);
+        dnode.appendChild(enode);
+        fnode= xdoc.createElement('year');
+        enode.appendChild(fnode);
+        fnode= xdoc.createElement('month');   
+        enode.appendChild(fnode);      
+        fnode= xdoc.createElement('day');   
+        enode.appendChild(fnode);}
+           
+function saveAppend()  <!--신규기사 추가-->
+{
+      if (p_no.innerText=='?')  
+      {
+          newsnode();
+          
+          xroot.appendChild(bnode);
+          page_no = page_sum;
+          page_sum++; <!--기사 페이지 추가-->
+          p_no.innerText=page_no+1;
+          p_sum.innerText=page_sum;
+     }
+      bnode =xroot.childNodes(page_no);
+      
+      bnode.childNodes(0).childNodes(1).text = controls.s_title.value;
+      if(controls.cbr.checked)      
+            bnode.childNodes(2).childNodes(0).childNodes(0).text = controls.s_reporter.value;
+      if(controls.cbd.checked){
+            var date=bnode.childNodes(2).childNodes(1).childNodes(0);
+            date.childNodes(0).text=controls.s_year.value;
+            date.childNodes(1).text=controls.s_month.value;
+            date.childNodes(2).text=controls.s_date.value;
+    }
+    
+      str = controls.s_category.value;
+      if (str == '기타') bnode.childNodes(0).childNodes(0).removeAttribute("list");
+      else if (str) bnode.childNodes(0).childNodes(0).setAttribute("list",str);
+      
+      resDiv2.innerText = bnode.xml;
+ }
+
+ function Search1()  <!--기사원문 검색-->
+	{
+  xroot=xdoc.documentElement;
+  
+  var resHTML='';
+  <!--title 체크 -->
+  if(controls.s_title.value=='') alert("제목을 입력하세요");
+ 
+  else{ 
+  var atlist = xroot.selectNodes('//*[text()="' + controls.s_title.value + '"]');  
+  if(atlist(0)!=null) { 
+  var titleparent=atlist(0).parentNode.parentNode; <!--만약 찾았다면-->
+  
+  var treporter=titleparent.childNodes(2).childNodes(0).childNodes(0);
+  var tcategory=titleparent.childNodes(0).childNodes(0);
+
+  var tdate=titleparent.childNodes(2).childNodes(1).childNodes(0);
+  var tyear=tdate.childNodes(0);
+  var tmonth=tdate.childNodes(1);
+  var tday=tdate.childNodes(2);
+  
+  <!--reporter 체크 -->
+  if (controls.cbr.checked && treporter.text!=controls.s_reporter.value)
+        titleparent=null;
+  <!--category 체크-->
+  if (controls.s_category.value!="기타"&&tcategory.getAttribute("list")!=controls.s_category.value)  
+        titleparent=null;
+  <!-- 날짜 체크-->
+  if(controls.cbd.checked)
+    if(tyear.text!=controls.s_year.value || tmonth.text!=controls.s_month.value||tday.text!=controls.s_date.value)
+        titleparent=null;
+}<!--타이틀-->
+
+<!--텍스트 불러오기-->
+  if (titleparent)  {
+       resDiv2.innerText = titleparent.xml;
+       for(i=0;i< xroot.childNodes.length;i++){
+       if(controls.s_title.value==xroot.childNodes(i).childNodes(0).childNodes(1).text) page_no=i+1;
+       }
+       p_no.innerText=page_no;
+       }
+  else {
+      p_no.innerText='?';
+       resDiv2.innerHTML = "<H3>No match found by this search</H3>";}
+}}
+
+ function indexList()
+  {
+  var Node=xroot.selectNodes('//title');
+   p_no.innerText='total';
+  var resHTML='';
+  for(i=0;i<Node.length;i++) resHTML=resHTML+(i+1)+". "+Node.item(i).text+"\n";
+  resDiv2.innerText=resHTML;
+  }
+  
+  function remake(){
+  if(page_no!='?'){
+      bnode =xroot.childNodes(page_no);
+      
+      bnode.childNodes(0).childNodes(1).text = controls.s_title.value;
+      if(controls.cbr.checked)      
+            bnode.childNodes(2).childNodes(0).childNodes(0).text = controls.s_reporter.value;
+      if(controls.cbd.checked){
+            var date=bnode.childNodes(2).childNodes(1).childNodes(0);
+            date.childNodes(0).text=controls.s_year.value;
+            date.childNodes(1).text=controls.s_month.value;
+            date.childNodes(2).text=controls.s_date.value;
+    }
+    
+      str = controls.s_category.value;
+      if (str == '기타') bnode.childNodes(0).childNodes(0).removeAttribute("list");
+      else if (str) bnode.childNodes(0).childNodes(0).setAttribute("list",str);
+      
+      resDiv2.innerText = bnode.xml;
+ }}
+  
+  
+  function preview1()
+  {
+      if (p_no.innerText=='?')  
+      {
+           newsnode();
+     }
+      
+      bnode.childNodes(0).childNodes(1).text = controls.s_title.value;
+      if(controls.cbr.checked)      
+            bnode.childNodes(2).childNodes(0).childNodes(0).text = controls.s_reporter.value;
+      if(controls.cbd.checked){
+            var date=bnode.childNodes(2).childNodes(1).childNodes(0);
+            date.childNodes(0).text=controls.s_year.value;
+            date.childNodes(1).text=controls.s_month.value;
+            date.childNodes(2).text=controls.s_date.value;
+    }
+    
+      str = controls.s_category.value;
+      if (str == '기타') bnode.childNodes(0).childNodes(0).removeAttribute("list");
+      else if (str) bnode.childNodes(0).childNodes(0).setAttribute("list",str);
+      
+      resDiv2.innerText = bnode.xml;
+
+  }
+
+	
+</Script>
+
+ <ul>
+   <table height="300">
+   <tbody>
+     <tr>
+     <td bgcolor="#D2D2FF" >
+ <div ><table  width="350"><tr>
+      <td width="340">      
+      <p><b><font size="3" face="맑은 고딕">(1) 기사선택</font></b>
+      <p><font size="2" face="맑은 고딕">
+    <INPUT type='button' onclick="FileLoad1('news_index.xml')"  value="뉴스목록 파일로드"/></font></p>
+  
+     <font size="2" face="맑은 고딕">
+  <FORM id=controls method=get>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <INPUT onclick=goList(0) type=button value="|◀">
+    <INPUT onclick=goList(1) type=button value="◀">
+    <INPUT onclick=goList(2) type=button value="▶">
+    <INPUT onclick=goList(3) type=button value="▶|">&nbsp;&nbsp;&nbsp;
+    <INPUT onclick="newAppend();" type=button value=신규추가><BR><br/>   
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+제목  :&nbsp;<input type="text" name="s_title" size="16"/><br/>   
+&nbsp;&nbsp; &nbsp; 
+  분야  :   <select name="s_category" size="1">
+      <option value="음식">음식</option>
+      <option value="연예">연예</option>
+      <option value="스포츠">스포츠</option>
+      <option value="여행">여행</option>
+      <option value="날씨">날씨</option>
+      <option value="공연">공연</option>
+      <option value="기타" selected>기타</option>
+    </select><br>
+    
+    <input type="checkbox" name="cbr"/>
+    기자  :    <input type="text" name="s_reporter"  size="16"/></br>   
+      <input type="checkbox" name="cbd">
+      날짜  :      <select name="s_year" size="1">
+        <option value="2015">2015</option>
+        <option value="2016">2016</option>
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+        <option selected></option>
+      </select>년 
+          
+        <select name="s_month" size="1">
+        <option value="01">01</option>
+        <option value="02">02</option>
+        <option value="03">03</option>
+        <option value="04">04</option>
+        <option value="05">05</option>
+        <option value="06">06</option>
+        <option value="07">07</option>
+        <option value="08">08</option>
+        <option value="09">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option selected></option>
+     </select>월
+
+  <input type="text" name="s_date" size="2">
+  </select>일<br> 
+    </font>
+  </FORM>
+  <p><font size="2" face="맑은 고딕">
+
+  <input type="submit" onclick="saveAppend();" value=" 저 장 ">&nbsp;
+  <input type="submit" name="검색" value="미리보기"onClick="preview1()"> &nbsp;
+  <input type="submit" name="수정" value="수정하기"onClick="remake()"> <br/>
+  <input type="submit" name="기사 검색" onClick="Search1()" value="기사 원문 검색"/>
+  <input type="submit" name="검색" value="전체기사 목록보기"onClick="indexList()"></font><font size="2" face="맑은 고딕"></p>
+  </font><font face="맑은 고딕"></font></p>
+     </td></tr>
+    </table>
+  </div>
+ <p><font size="2" face="맑은 고딕">  
+ 
+  <td bgcolor="#D5C2EE" valign="top" >
+
+    <table width="380">
+      <tr>
+      <td width="370">
+    <div id="result2">
+    <b><font size="3" face="맑은 고딕">(2) 기사목록</font></b></div><br/>
+        <font size="2" face="맑은 고딕"><form>기사 번호 : 
+    <SPAN id=p_no>0</SPAN>  ( 총 기사 개수 : <SPAN id=p_sum>n</SPAN> )
+</form></font>
+        <p><font size="2" face="맑은 고딕"><div id=resDiv2></div></font></p>
+  </td></tr>
+  </table>
+  </td></tr>
+  </tbody>
+</table>
+</ul>
+</HTML>
